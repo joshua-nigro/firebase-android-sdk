@@ -72,7 +72,15 @@ task codecov(type: Exec) {
     environment "CI_BUILD_ID", "$build"
     environment "CI_JOB_ID", "$job"
 
-    commandLine 'bash', '/opt/codecov/uploader.sh'
+    standardOutput new ByteArrayOutputStream()
+    errorOutput new ByteArrayOutputStream()
+
+    commandLine 'printenv'
+
+    doLast {
+        logger.quiet(standardOutput.toString())
+        logger.error(errorOutput.toString())
+    }
 }
 
 // TODO(yifany@): Uploads coverage reports to coveralls.
